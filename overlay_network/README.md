@@ -7,39 +7,39 @@ Redis Sentinel on Docker Swarm:
 Every instance of Redis has its shared volume, for managing the consistency (RDB and AOF). 
   
 # Prepare the environment  
-*Create Overlay Network*
-docker network create -d overlay redis --attachable=true
+*Create Overlay Network*  
+docker network create -d overlay redis --attachable=true  
 
-*Create the user for SSHFS (choose a node)*
-adduser -D test
-echo "test:testpassword" | chpasswd
-mkdir /home/test/master
-mkdir /home/test/slave1
-mkdir /home/test/slave2
-chown test:test master slave1 slave2
+*Create the user for SSHFS (choose a node)*  
+adduser -D test  
+echo "test:testpassword" | chpasswd  
+mkdir /home/test/master  
+mkdir /home/test/slave1  
+mkdir /home/test/slave2  
+chown test:test /home/test/master /home/test/slave1 /home/test/slave2  
 
-*Create the shared SSHFS Volume*
-docker plugin install --grant-all-permissions vieux/sshfs
-docker volume create -d vieux/sshfs -o sshcmd=test@192.168.0.8:/home/test/master -o allow_other -o password=testpassword mastervolume
-docker volume create -d vieux/sshfs -o sshcmd=test@192.168.0.8:/home/test/slave1 -o allow_other -o password=testpassword slave1volume
-docker volume create -d vieux/sshfs -o sshcmd=test@192.168.0.8:/home/test/slave2 -o allow_other -o password=testpassword slave2volume
+*Create the shared SSHFS Volume*  
+docker plugin install --grant-all-permissions vieux/sshfs  
+docker volume create -d vieux/sshfs -o sshcmd=test@<Host IP with test user>:/home/test/master -o allow_other -o password=testpassword mastervolume  
+docker volume create -d vieux/sshfs -o sshcmd=test@<Host IP with test user>:/home/test/slave1 -o allow_other -o password=testpassword slave1volume  
+docker volume create -d vieux/sshfs -o sshcmd=test@<Host IP with test user>:/home/test/slave2 -o allow_other -o password=testpassword slave2volume  
 
-*Test the SSHFS Volume (check the somefile file in the test $HOME subdirectory)*
-docker run -it -v mastervolume:/data alpine sh -c 'echo "Hello world" > /data/somefile'
-docker run -it -v slave1volume:/data alpine sh -c 'echo "Hello world" > /data/somefile'
-docker run -it -v slave2volume:/data alpine sh -c 'echo "Hello world" > /data/somefile'
+*Test the SSHFS Volume (check the somefile file in the test $HOME subdirectory)*  
+docker run -it -v mastervolume:/data alpine sh -c 'echo "Hello world" > /data/somefile'  
+docker run -it -v slave1volume:/data alpine sh -c 'echo "Hello world" > /data/somefile'  
+docker run -it -v slave2volume:/data alpine sh -c 'echo "Hello world" > /data/somefile'  
 
-*Deploy the stack*  
-docker stack deploy <stack name> -c ./<yml file>  
+*Deploy the Stack Yaml*    
+docker stack deploy <stack name> -c ./<yml file>    
   
 *Verify the running state of the services*  
 docker stack ps <stack name> 
 
-# TEST NETWORK
-docker run --name lab --network redis -v /root:/test -it ubuntu /bin/sh
-apt update
-apt install iputils-ping
-ping <hostname> (from every container ping each other hostname)
+# TEST NETWORK  
+docker run --name lab --network redis -v /root:/test -it ubuntu /bin/sh  
+apt update  
+apt install iputils-ping  
+ping <hostname> (from every container ping each other hostname)  
   
 # TEST REDIS  
 *Connect to Redis Master/Slave containers*  
