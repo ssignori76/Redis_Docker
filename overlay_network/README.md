@@ -35,13 +35,13 @@ docker stack deploy <stack name> -c ./<yml file>
 *Verify the running state of the services*  
 docker stack ps <stack name> 
 
-# TEST NETWORK  
-docker run --name lab --network redis -v /root:/test -it ubuntu /bin/sh  
+# Test Network  
+docker run --name lab --network redis -v /root:/test -it lusig76/lab /bin/sh
 apt update  
 apt install iputils-ping  
 ping <hostname> (from every container ping each other hostname)  
   
-# TEST REDIS  
+# Test Redis  
 *Connect to Redis Master/Slave containers*  
 docker exec -it <container_ID> /bin/sh  
   
@@ -54,8 +54,15 @@ The output should contain:
   role:master  
   connected_slaves:2  
 */  
+
+# Test Sentinel HA
+docker run --name lab --network redis -v /root:/test -it lusig76/lab /bin/sh  
+/java_utils/Redis  
+watch -n 1 java -jar ./SentinelClient.jar  
+
+Pause and unpause Master and Slave Containers to test the HA.  
   
-# TEST REPLICAS  
+# Test Replication  
 *Connect to Redis Master container and set a key*  
 redis-cli  
 auth 7cBEcwf6mV36Rx3S  
@@ -66,7 +73,7 @@ redis-cli
 auth 7cBEcwf6mV36Rx3S  
 GET testkey  
   
-# PERFORMANCE TEST  
+# Performance Test  
 redis-benchmark -q -n 100000 -a 7cBEcwf6mV36Rx3S  
 https://redis.io/docs/management/optimization/benchmarks/  
   
