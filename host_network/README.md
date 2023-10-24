@@ -5,6 +5,8 @@ Redis Sentinel on Docker Swarm with 3 nodes:
 - 3 redis sentinel  
   
 The network is configured in host mode, to permit connections to Sentinel instances from the client external to the Docker Swarm cluster.  
+The Redis instances are configured with constraints to run on a specific node.
+This configuration avoids configuring a shared volume to manage consistency (RDB or AOF).
   
 # Prepare the environment  
 *Create the node labels*  
