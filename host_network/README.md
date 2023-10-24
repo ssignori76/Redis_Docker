@@ -1,4 +1,4 @@
-# Redis Sentinel on Docker Swarm for external clients' connection  
+# Redis Sentinel on Docker Swarm for external clients' connection (clients external the docker cluster) 
 Redis Sentinel on Docker Swarm with 3 nodes:  
 - 1 redis master  
 - 2 redis replicas  
