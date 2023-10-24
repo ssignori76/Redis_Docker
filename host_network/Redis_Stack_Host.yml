@@ -12,7 +12,7 @@ services:
       hostnet: {}
     volumes:
       - 'redis-master-volume:/redis_data'
-    command: redis-server --loglevel notice --requirepass 7cBEcwf6mV36Rx3S --masterauth 7cBEcwf6mV36Rx3S
+    command: redis-server --loglevel notice --requirepass 7cBEcwf6mV36Rx3S --masterauth 7cBEcwf6mV36Rx3S --dir /redis_data
     deploy:
       mode: replicated
       replicas: 1
@@ -28,7 +28,7 @@ services:
       - redis-master
     volumes:
       - 'redis-slave-volume:/redis_data'
-    command: redis-server --loglevel notice --replicaof 192.168.0.25 6379 --replica-read-only yes --masterauth 7cBEcwf6mV36Rx3S --requirepass 7cBEcwf6mV36Rx3S
+    command: redis-server --loglevel notice --replicaof 192.168.0.25 6379 --replica-read-only yes --masterauth 7cBEcwf6mV36Rx3S --requirepass 7cBEcwf6mV36Rx3S --dir /redis_data
     deploy:
       mode: replicated
       replicas: 1
@@ -44,7 +44,7 @@ services:
       - redis-master
     volumes:
       - 'redis-slave-volume:/redis_data'
-    command: redis-server --loglevel notice --replicaof 192.168.0.25 6379 --replica-read-only yes  --masterauth 7cBEcwf6mV36Rx3S --requirepass 7cBEcwf6mV36Rx3S
+    command: redis-server --loglevel notice --replicaof 192.168.0.25 6379 --replica-read-only yes  --masterauth 7cBEcwf6mV36Rx3S --requirepass 7cBEcwf6mV36Rx3S --dir /redis_data
     deploy:
       mode: replicated
       replicas: 1
@@ -58,8 +58,8 @@ services:
       hostnet: {}
     depends_on:
       - redis-master
-    volumes:
-      - 'redis-sentinel-volume:/sentinel_data'
+#    volumes:
+#      - 'redis-sentinel-volume:/sentinel_data'
     entrypoint: |
       bash -c 'bash -s <<EOF
       "/bin/bash" -c "cat <<EOF > /tmp/sentinel.conf
@@ -86,8 +86,8 @@ services:
       hostnet: {}
     depends_on:
       - redis-master
-    volumes:
-      - 'redis-sentinel-volume:/sentinel_data'
+#    volumes:
+#      - 'redis-sentinel-volume:/sentinel_data'
     entrypoint: |
       bash -c 'bash -s <<EOF
       "/bin/bash" -c "cat <<EOF > /tmp/sentinel.conf
@@ -114,8 +114,8 @@ services:
       hostnet: {}
     depends_on:
       - redis-master
-    volumes:
-      - 'redis-sentinel-volume:/sentinel_data'
+#    volumes:
+#      - 'redis-sentinel-volume:/sentinel_data'
     entrypoint: |
       bash -c 'bash -s <<EOF
       "/bin/bash" -c "cat <<EOF > /tmp/sentinel.conf

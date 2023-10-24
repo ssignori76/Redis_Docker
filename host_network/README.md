@@ -1,10 +1,12 @@
-# Redis Sentinel on Docker Swarm for external clients' connection  
+# Redis Sentinel on Docker Swarm for external clients' connection (clients external the docker cluster) 
 Redis Sentinel on Docker Swarm with 3 nodes:  
 - 1 redis master  
 - 2 redis replicas  
 - 3 redis sentinel  
   
 The network is configured in host mode, to permit connections to Sentinel instances from the client external to the Docker Swarm cluster.  
+The Redis instances are configured with constraints to run on a specific node.
+This configuration avoids configuring a shared volume to manage consistency (RDB or AOF).
   
 # Prepare the environment  
 *Create the node labels*  
