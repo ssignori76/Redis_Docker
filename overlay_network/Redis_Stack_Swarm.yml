@@ -1,0 +1,140 @@
+version: '3.7'
+
+networks:
+  redis:
+    external: true
+    name: redis
+
+services:
+  redis-master:
+    image: redis:7.0.2
+    networks:
+      redis: {}
+#    ports:
+#      - 6379:6379
+    volumes:
+      - 'mastervolume:/redis_data'
+    command: redis-server --loglevel notice --requirepass 7cBEcwf6mV36Rx3S --masterauth 7cBEcwf6mV36Rx3S --dir /redis_data
+    deploy:
+      mode: replicated
+      replicas: 1
+    hostname: "master"
+
+  redis-slave1:
+    image: redis:7.0.2
+    networks:
+      redis: {}
+    depends_on:
+      - redis-master
+    volumes:
+      - 'slave1volume:/redis_data'
+    command: redis-server --loglevel notice --replicaof master 6379 --replica-read-only yes --masterauth 7cBEcwf6mV36Rx3S --requirepass 7cBEcwf6mV36Rx3S --dir /redis_data
+    deploy:
+      mode: replicated
+      replicas: 1
+    hostname: "slave1"
+
+  redis-slave2:
+    image: redis:7.0.2
+    networks:
+      redis: {}
+    depends_on:
+      - redis-master
+    volumes:
+      - 'slave2volume:/redis_data'
+    command: redis-server --loglevel notice --replicaof master 6379 --replica-read-only yes  --masterauth 7cBEcwf6mV36Rx3S --requirepass 7cBEcwf6mV36Rx3S --dir /redis_data
+    deploy:
+      mode: replicated
+      replicas: 1
+    hostname: "slave2"
+
+  redis-sentinel1:
+    image: redis:7.0.2
+    networks:
+      redis: {}
+    depends_on:
+      - redis-master
+#    volumes:
+#      - 'redis-sentinel-volume:/data'
+    entrypoint: |
+      bash -c 'bash -s <<EOF
+      "/bin/bash" -c "cat <<EOF > /tmp/sentinel.conf
+      port 26379
+      dir /tmp
+      sentinel monitor redis-cache master 6379 2
+      sentinel down-after-milliseconds redis-cache 5000
+      sentinel parallel-syncs redis-cache 1
+      sentinel failover-timeout redis-cache 5000
+      sentinel auth-pass redis-cache 7cBEcwf6mV36Rx3S
+      sentinel resolve-hostnames yes
+      EOF"
+      "/bin/bash" -c "redis-sentinel /tmp/sentinel.conf"
+      EOF'
+    deploy:
+      mode: replicated
+      replicas: 1
+    hostname: "sentinel1"
+
+  redis-sentinel2:
+    image: redis:7.0.2
+    networks:
+      redis: {}
+    depends_on:
+      - redis-master
+#    volumes:
+#      - 'redis-sentinel-volume:/data'
+    entrypoint: |
+      bash -c 'bash -s <<EOF
+      "/bin/bash" -c "cat <<EOF > /tmp/sentinel.conf
+      port 26379
+      dir /tmp
+      sentinel monitor redis-cache master 6379 2
+      sentinel down-after-milliseconds redis-cache 5000
+      sentinel parallel-syncs redis-cache 1
+      sentinel failover-timeout redis-cache 5000
+      sentinel auth-pass redis-cache 7cBEcwf6mV36Rx3S
+      sentinel resolve-hostnames yes
+      EOF"
+      "/bin/bash" -c "redis-sentinel /tmp/sentinel.conf"
+      EOF'
+    deploy:
+      mode: replicated
+      replicas: 1
+    hostname: "sentinel2"
+
+  redis-sentinel3:
+    image: redis:7.0.2
+    networks:
+      redis: {}
+    depends_on:
+      - redis-master
+#    volumes:
+#      - 'redis-sentinel-volume:/data'
+    entrypoint: |
+      bash -c 'bash -s <<EOF
+      "/bin/bash" -c "cat <<EOF > /tmp/sentinel.conf
+      port 26379
+      dir /tmp
+      sentinel monitor redis-cache master 6379 2
+      sentinel down-after-milliseconds redis-cache 5000
+      sentinel parallel-syncs redis-cache 1
+      sentinel failover-timeout redis-cache 5000
+      sentinel auth-pass redis-cache 7cBEcwf6mV36Rx3S
+      sentinel resolve-hostnames yes
+      EOF"
+      "/bin/bash" -c "redis-sentinel /tmp/sentinel.conf"
+      EOF'
+    deploy:
+      mode: replicated
+      replicas: 1
+    hostname: "sentinel3"
+
+volumes:
+  mastervolume:
+    external: true
+  slave1volume:
+    external: true
+  slave2volume:
+    external: true
+#  redis-sentinel-volume:
+#    driver: local  
