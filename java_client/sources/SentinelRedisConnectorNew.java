@@ -3,9 +3,9 @@ package redis;
 import io.lettuce.core.*;
 import io.lettuce.core.api.StatefulRedisConnection;
 import io.lettuce.core.api.sync.RedisCommands;
-import io.lettuce.core.codec.StringCodec;
-import io.lettuce.core.masterreplica.MasterReplica;
-import io.lettuce.core.masterreplica.StatefulRedisMasterReplicaConnection;
+//import io.lettuce.core.codec.StringCodec;
+//#import io.lettuce.core.masterreplica.MasterReplica;
+//#import io.lettuce.core.masterreplica.StatefulRedisMasterReplicaConnection;
 
 public class SentinelRedisConnectorNew {
 	// Definisco la PWD
@@ -27,10 +27,16 @@ public class SentinelRedisConnectorNew {
 	// Predispongo l'oggetto per richiamare i comandi su Redis
 	RedisCommands<String, String> syncCommands = connection.sync();
 	
-	// Definisco il metodo
+	// Scrivo una chiave in cache
+	String prova = syncCommands.set("keytest", "prova");
+	
+	// Definisco il metodo che recupera lo stato del master e interroga la chiave di test
     public void getMaster() {
     	String info_replication = syncCommands.info("replication");
+    	String getKey = syncCommands.get("keytest");
         System.out.println("Master: " + info_replication);
+        System.out.println("----------------------------------");
+        System.out.println("Il valore della chiave memorizzata in cache è: " + getKey);
     }
         
     // Eseguo il metodo
