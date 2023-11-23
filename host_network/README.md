@@ -15,14 +15,14 @@ docker node update --label-add "type=slave1" <'docker node2 name'>
 docker node update --label-add "type=slave2" <'docker node3 name'>   
   
 *Deploy the stack*  
-docker stack deploy <stack name> -c ./<yml file>  
+docker stack deploy <stack name> -c ./<'yml file'>  
   
 *Verify the running state of the services*  
-docker stack ps <stack name> 
+docker stack ps <'stack name'> 
   
 # TEST REDIS  
 *Connect to Redis Master/Slave containers*  
-docker exec -it <container_ID> /bin/sh  
+docker exec -it <'container_ID'> /bin/sh  
   
 *Verify that the master is connected with 2 replicas"  
 redis-cli  
