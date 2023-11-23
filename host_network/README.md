@@ -11,8 +11,8 @@ This configuration avoids configuring a shared volume to manage consistency (RDB
 # Prepare the environment  
 *Create the node labels*  
 docker node update --label-add "type=master" <'docker node1 name'>   
-docker node update --label-add "type=slave1" 'docker node2 name'   
-docker node update --label-add "type=slave2" 'docker node3 name'   
+docker node update --label-add "type=slave1" <'docker node2 name'>   
+docker node update --label-add "type=slave2" <'docker node3 name'>   
   
 *Deploy the stack*  
 docker stack deploy <stack name> -c ./<yml file>  
