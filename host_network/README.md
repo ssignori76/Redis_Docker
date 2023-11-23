@@ -10,15 +10,15 @@ This configuration avoids configuring a shared volume to manage consistency (RDB
   
 # Prepare the environment  
 *Create the node labels*  
-docker node update --label-add "type=master" <'docker node1 name'>   
-docker node update --label-add "type=slave1" <'docker node2 name'>   
-docker node update --label-add "type=slave2" <'docker node3 name'>   
+docker node update --label-add "type=master" node1_name   
+docker node update --label-add "type=slave1" node2_name   
+docker node update --label-add "type=slave2" node3_name
   
 *Deploy the stack*  
-docker stack deploy <stack name> -c ./<'yml file'>  
+docker stack deploy your_stackname -c ./your_file.yaml  
   
 *Verify the running state of the services*  
-docker stack ps <'stack name'> 
+docker stack ps your_stackname 
   
 # TEST REDIS  
 *Connect to Redis Master/Slave containers*  
