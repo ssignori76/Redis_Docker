@@ -34,16 +34,16 @@ The output should contain:
   connected_slaves:2  
 */  
 
-# Test Sentinel
-*Connect to a Sentinel container*
-redis-cli -p 26379 sentinel masters    --> show detailed info about the master
-redis-cli -p 26379 SENTINEL GET-MASTER-ADDR-BY-NAME redis-cache    --> show the IP of the master
-redis-cli -p 26379 SENTINEL replicas redis-cache   --> show the replicas of the master 
-redis-cli -p 26379 SENTINEL sentinels redis-cache  --> show the other sentinels in the network
+# Test Sentinel  
+*Connect to a Sentinel container*  
+redis-cli -p 26379 sentinel masters    --> show detailed info about the master  
+redis-cli -p 26379 SENTINEL GET-MASTER-ADDR-BY-NAME redis-cache    --> show the IP of the master  
+redis-cli -p 26379 SENTINEL replicas redis-cache   --> show the replicas of the master   
+redis-cli -p 26379 SENTINEL sentinels redis-cache  --> show the other sentinels in the network  
 
-To TEST the connectivity of the others Sentinels instances you could repeat the commands with the -h parameter, for example:
-redis-cli -h hostIP -p 26379 sentinel masters  
-redis-cli -h containerIP -p 26379 sentinel masters 
+To TEST the connectivity of the others Sentinels instances you could repeat the commands with the -h parameter, for example:  
+redis-cli -h hostIP -p 26379 sentinel masters    
+redis-cli -h containerIP -p 26379 sentinel masters   
   
 # TEST REPLICAS  
 *Connect to Redis Master container and set a key*  
