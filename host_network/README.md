@@ -41,7 +41,7 @@ redis-cli -p 26379 SENTINEL GET-MASTER-ADDR-BY-NAME redis-cache    --> show the 
 redis-cli -p 26379 SENTINEL replicas redis-cache   --> show the replicas of the master   
 redis-cli -p 26379 SENTINEL sentinels redis-cache  --> show the other sentinels in the network  
 
-To TEST the connectivity of the others Sentinels instances you could repeat the commands with the -h parameter, for example:  
+*To TEST the connectivity of the others Sentinels instances you could repeat the commands with the -h parameter, for example:*  
 redis-cli -h hostIP -p 26379 sentinel masters    
 redis-cli -h containerIP -p 26379 sentinel masters   
   
